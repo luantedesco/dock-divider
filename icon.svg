@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a4f5c"/>
+      <stop offset="1" stop-color="#1c1e24"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5ac8fa"/>
+      <stop offset="1" stop-color="#0a84ff"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6ee07f"/>
+      <stop offset="1" stop-color="#28b446"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffb340"/>
+      <stop offset="1" stop-color="#ff7a1a"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c38bff"/>
+      <stop offset="1" stop-color="#8a4dff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Grade de ícone do macOS: quadrado arredondado de 824 px centrado no canvas de 1024 -->
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/>
+
+  <!-- Mini-Dock -->
+  <rect x="150" y="412" width="724" height="200" rx="56" fill="#ffffff" fill-opacity="0.10"/>
+  <rect x="151.5" y="413.5" width="721" height="197" rx="54.5" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="3"/>
+
+  <rect x="174" y="442" width="140" height="140" rx="32" fill="url(#blue)"/>
+  <rect x="338" y="442" width="140" height="140" rx="32" fill="url(#green)"/>
+  <rect x="505" y="432" width="14" height="160" rx="7" fill="#ffffff" fill-opacity="0.85"/>
+  <rect x="546" y="442" width="140" height="140" rx="32" fill="url(#orange)"/>
+  <rect x="710" y="442" width="140" height="140" rx="32" fill="url(#purple)"/>
+</svg>
