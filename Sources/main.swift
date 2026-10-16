@@ -1,16 +1,16 @@
 import AppKit
 import ServiceManagement
 
-// As divisórias são os espaços nativos da Dock ("spacer-tile"): sem ícone e sem balão.
-// O app lê pela Acessibilidade onde cada espaço está e desenha por cima uma linha igual à
-// que separa a lixeira, numa janela transparente que não recebe cliques.
+// The dividers are the Dock's native spacers ("spacer-tile"): no icon and no tooltip.
+// The app reads where each spacer is through Accessibility and draws over it a line like the
+// one next to the Trash, in a transparent window that ignores clicks.
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var lines: [NSWindow] = []
     private var items: DockItems?
     private var layout = DockLayout(lines: [], edge: .minY, thickness: 0)
     private var timer: Timer?
-    // Até quando atualizar a 60 Hz. Fora disso, 2 Hz: a leitura pela Acessibilidade custa ~1 ms.
+    // Refresh at 60 Hz until this date, 2 Hz otherwise: a full Accessibility read costs ~1 ms.
     private var fastUntil = Date.distantPast
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -28,8 +28,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let prompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String
         AXIsProcessTrustedWithOptions([prompt: true] as CFDictionary)
 
-        // A Dock se mexe ao aparecer, sumir ou ampliar, sempre com o cursor perto da borda dela,
-        // e ao trocar de espaço (tela cheia). Nesses momentos as linhas seguem a animação.
+        // The Dock moves when it shows, hides, or magnifies, always with the cursor near its edge,
+        // and when the Space changes (full screen). The lines follow the animation then.
         NSEvent.addGlobalMonitorForEvents(matching: .mouseMoved) { [weak self] _ in
             if let self, self.layout.isNear(NSEvent.mouseLocation) { self.speedUp() }
         }
@@ -45,7 +45,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         item.state = service.status == .enabled ? .on : .off
     }
 
-    // Novo espaço vai para o fim dos apps; o usuário arrasta para a posição.
+    // The new spacer goes to the end of the apps; the user drags it into place.
     @objc private func addSpacer() {
         run("/usr/bin/defaults", ["write", "com.apple.dock", "persistent-apps", "-array-add",
                                   #"{"tile-type"="spacer-tile";}"#])
@@ -58,8 +58,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func refresh() {
-        // No ritmo rápido só relê a posição dos itens já achados; a varredura completa custa
-        // o quádruplo. Item que sumiu (Dock reiniciada, espaço removido) força a varredura.
+        // At the fast rate, only re-read the position of the items already found; a full scan
+        // costs four times as much. An item that is gone (Dock restarted, spacer removed) forces it.
         if Date() >= fastUntil || items == nil { items = dockItems() }
         var next = items.flatMap(dockLayout(of:))
         if next == nil {
@@ -91,7 +91,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func makeLineWindow() -> NSWindow {
         let window = NSWindow(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         window.isOpaque = false
-        // Mesmo tom da linha do sistema: clara no tema escuro, escura no claro.
+        // Same tone as the system line: light in dark mode, dark in light mode.
         window.backgroundColor = NSColor(name: nil) { appearance in
             appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
                 ? NSColor(white: 1, alpha: 0.33) : NSColor(white: 0, alpha: 0.4)
@@ -104,13 +104,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-// Onde está a Dock e onde desenhar as linhas, em coordenadas do AppKit.
+// Where the Dock is and where to draw the lines, in AppKit coordinates.
 struct DockLayout {
     var lines: [NSRect]
     var edge: NSRectEdge
     var thickness: CGFloat
 
-    // Cursor na faixa da borda da tela em que a Dock fica, com folga para ela começar a sumir.
+    // Cursor within the band along the Dock's screen edge, with room for the Dock to start hiding.
     func isNear(_ point: NSPoint) -> Bool {
         guard let screen = NSScreen.screens.first(where: { NSMouseInRect(point, $0.frame, false) })?.frame
         else { return false }
@@ -128,7 +128,7 @@ struct DockItems {
     var spacers: [AXUIElement]
 }
 
-// O item da divisória da lixeira e os espaços, na ordem da Dock.
+// The Trash separator item and the spacers, in Dock order.
 func dockItems() -> DockItems? {
     guard let dock = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first,
           let list = children(of: AXUIElementCreateApplication(dock.processIdentifier)).first(where: { role(of: $0) == "AXList" })
@@ -138,9 +138,9 @@ func dockItems() -> DockItems? {
     return DockItems(separator: separator, spacers: items.filter { subrole(of: $0) == "AXSpacerDockItem" })
 }
 
-// Uma linha no centro de cada espaço, cruzando a Dock. A linha do sistema ocupa ~72% da
-// espessura do item da divisória, centralizada nele. Com a Dock oculta, a Acessibilidade
-// informa os itens fora da tela, e as linhas ficam fora junto. Nil se algum item sumiu.
+// One line at the center of each spacer, across the Dock. The system line spans ~72% of the
+// separator item's thickness, centered on it. With the Dock hidden, Accessibility reports the
+// items off screen, and the lines go off screen with them. Nil if any item is gone.
 func dockLayout(of items: DockItems) -> DockLayout? {
     let spacers = items.spacers.compactMap(frame(of:))
     guard spacers.count == items.spacers.count,
@@ -148,11 +148,11 @@ func dockLayout(of items: DockItems) -> DockLayout? {
           let screenHeight = NSScreen.screens.first?.frame.height
     else { return nil }
 
-    // Na Dock de baixo o item da divisória é alto e estreito; nas laterais, largo e baixo.
+    // On a bottom Dock the separator item is tall and narrow; on a side Dock, wide and short.
     let horizontal = separator.height > separator.width
     let length = ((horizontal ? separator.height : separator.width) * 0.72).rounded()
     let lines = spacers.map { spacer in
-        // Retângulo no sistema da Acessibilidade, convertido para o do AppKit (origem embaixo).
+        // Rect in Accessibility coordinates, converted to AppKit's (origin at the bottom).
         let rect = horizontal
             ? CGRect(x: spacer.midX - 0.5, y: separator.midY - length / 2, width: 1, height: length)
             : CGRect(x: separator.midX - length / 2, y: spacer.midY - 0.5, width: length, height: 1)
@@ -178,12 +178,12 @@ func stringAttribute(_ name: String, of element: AXUIElement) -> String? {
     return value as? String
 }
 
-// Frame no sistema da Acessibilidade: origem no canto superior esquerdo da tela principal.
+// Frame in Accessibility coordinates: origin at the top-left corner of the main screen.
 func frame(of element: AXUIElement) -> CGRect? {
     var position: CFTypeRef?, size: CFTypeRef?
     AXUIElementCopyAttributeValue(element, kAXPositionAttribute as CFString, &position)
     AXUIElementCopyAttributeValue(element, kAXSizeAttribute as CFString, &size)
-    // Tipos CF não aceitam "as?": confere o tipo antes, e a conversão deixa de poder falhar.
+    // CF types do not support "as?": check the type first, so the cast cannot fail.
     guard let position, let size,
           CFGetTypeID(position) == AXValueGetTypeID(), CFGetTypeID(size) == AXValueGetTypeID()
     else { return nil }

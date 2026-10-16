@@ -1,14 +1,14 @@
 #!/bin/sh
-# Compila o Dock Divider.app em build/. Assina com o certificado "Dock Divider Local Signing"
-# quando ele existe no Keychain, o que mantém a permissão de Acessibilidade entre builds; sem ele,
-# assina ad-hoc e a permissão precisa ser concedida de novo a cada recompilação.
+# Builds Dock Divider.app in build/. Signs it with the "Dock Divider Local Signing" certificate
+# when it is in the Keychain, which keeps the Accessibility permission across builds; without it,
+# signs ad hoc and the permission has to be granted again after every rebuild.
 set -e
 cd "$(dirname "$0")"
 APP=build/"Dock Divider.app"
 IDENTITY="Dock Divider Local Signing"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-# Binário universal: roda em Apple Silicon e Intel.
+# Universal binary: runs on Apple Silicon and Intel.
 for ARCH in arm64 x86_64; do
   swiftc -O -target "$ARCH-apple-macos14" Sources/main.swift -o "build/DockDivider-$ARCH"
 done
@@ -19,7 +19,7 @@ swift Tools/make-icon.swift "$APP/Contents/Resources/AppIcon.icns"
 if security find-identity -p codesigning | grep -q "\"$IDENTITY\""; then
   codesign --force -s "$IDENTITY" "$APP"
 else
-  echo "Certificado \"$IDENTITY\" não encontrado: assinando ad-hoc."
+  echo "Certificate \"$IDENTITY\" not found: signing ad hoc."
   codesign --force -s - "$APP"
 fi
 echo "OK: $APP"

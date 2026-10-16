@@ -1,7 +1,7 @@
 #!/bin/sh
-# Instala a última release do Dock Divider em /Applications e abre o app.
-# Uso: curl -fsSL https://raw.githubusercontent.com/luantedesco/dock-divider/main/Tools/install.sh | sh
-# O curl não marca o download com quarentena, então o Gatekeeper não bloqueia o app sem notarização.
+# Installs the latest Dock Divider release in /Applications and opens it.
+# Usage: curl -fsSL https://raw.githubusercontent.com/luantedesco/dock-divider/main/Tools/install.sh | sh
+# curl does not quarantine the download, so Gatekeeper does not block the non-notarized app.
 set -e
 APP="/Applications/Dock Divider.app"
 URL=https://github.com/luantedesco/dock-divider/releases/latest/download/DockDivider.dmg

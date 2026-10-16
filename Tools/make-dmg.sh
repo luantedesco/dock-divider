@@ -1,7 +1,7 @@
 #!/bin/sh
-# Empacota build/Dock Divider.app em build/DockDivider.dmg: o app e um atalho para
-# /Applications, para instalar arrastando. Rodar ./build.sh antes. O nome não leva a versão para
-# o link releases/latest/download/DockDivider.dmg apontar sempre para a última release.
+# Packages build/Dock Divider.app into build/DockDivider.dmg: the app and a shortcut to
+# /Applications, for drag-and-drop install. Run ./build.sh first. The name has no version so the
+# releases/latest/download/DockDivider.dmg link always points to the latest release.
 set -e
 cd "$(dirname "$0")/.."
 APP=build/"Dock Divider.app"

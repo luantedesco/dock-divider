@@ -1,9 +1,9 @@
-// Gera o AppIcon.icns a partir de Resources/icon.svg. O build.sh chama a cada build.
-// Uso: swift Tools/make-icon.swift <saída.icns>
+// Generates AppIcon.icns from Resources/icon.svg. build.sh runs it on every build.
+// Usage: swift Tools/make-icon.swift <output.icns>
 import AppKit
 
-// O .icns é montado à mão, com os tipos explícitos de cada tamanho: o macOS atual lê errado
-// os PNGs nos tipos legados pequenos (16 e 32 em 1x) e reduz o ic07 para eles.
+// The .icns is assembled by hand with an explicit type for each size: current macOS misreads
+// PNGs in the small legacy types (16 and 32 at 1x) and downsamples ic07 for them instead.
 let sizes: [(type: String, pixels: Int)] = [
     ("ic11", 32), ("ic12", 64), ("ic07", 128), ("ic13", 256),
     ("ic08", 256), ("ic14", 512), ("ic09", 512), ("ic10", 1024),
@@ -24,7 +24,7 @@ func png(_ pixels: Int) -> Data {
     return rep.representation(using: .png, properties: [:])!
 }
 
-// Formato: "icns" + tamanho total; depois, por entrada, tipo + tamanho (cabeçalho incluso) + PNG.
+// Format: "icns" + total length; then, per entry, type + length (header included) + PNG.
 func header(_ type: String, _ length: Int) -> Data {
     Data(type.utf8) + withUnsafeBytes(of: UInt32(length).bigEndian) { Data($0) }
 }
