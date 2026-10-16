@@ -11,13 +11,28 @@ The dividers are regular Dock spacer tiles (no icon, no tooltip). Dock Divider r
 - macOS 14 or later
 - Accessibility permission: needed to read the position of the Dock's items. The app asks for it on first launch; grant it in **System Settings → Privacy & Security → Accessibility**.
 
+## Install
+
+Download `DockDivider-<version>.zip` from the [latest release](https://github.com/luantedesco/dock-divider/releases/latest), unzip it, and move `Dock Divider.app` to `/Applications`.
+
+The app is not notarized by Apple, so macOS blocks it on first launch. To open it:
+
+- **macOS 15 or later:** try to open the app, then go to **System Settings → Privacy & Security** and click **Open Anyway**.
+- **macOS 14:** right-click the app, choose **Open**, then confirm.
+
+Or remove the quarantine flag from the terminal:
+
+```sh
+xattr -dr com.apple.quarantine "/Applications/Dock Divider.app"
+```
+
 ## Build
 
 ```sh
 ./build.sh
 ```
 
-The app is built at `build/Dock Divider.app`. Move it to `/Applications` and open it.
+The app is built at `build/Dock Divider.app` as a universal binary (Apple Silicon and Intel). Move it to `/Applications` and open it.
 
 ### Keeping the Accessibility permission across rebuilds
 
