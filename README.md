@@ -37,20 +37,10 @@ The app is built at `build/Dock Divider.app` as a universal binary (Apple Silico
 To package it as a disk image for distribution:
 
 ```sh
-./make-dmg.sh
+./Tools/make-dmg.sh
 ```
 
 The image is created at `build/DockDivider-<version>.dmg`.
-
-### Keeping the Accessibility permission across rebuilds
-
-Without a signing certificate, `build.sh` signs the app ad-hoc, and macOS treats each rebuild as a new app: the Accessibility permission has to be granted again. To avoid that, create a local self-signed certificate once per machine:
-
-```sh
-./create-signing-cert.sh
-```
-
-`build.sh` picks it up automatically.
 
 ## Usage
 
@@ -63,11 +53,7 @@ Adding a divider writes to the Dock's preferences (`defaults write com.apple.doc
 
 ## App icon
 
-`AppIcon.icns` is generated from `icon.svg`:
-
-```sh
-swift make-icon.swift
-```
+The app icon is drawn in `Resources/icon.svg`. `build.sh` turns it into `AppIcon.icns` on every build, so editing the SVG and rebuilding is enough.
 
 ## License
 
