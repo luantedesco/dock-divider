@@ -9,7 +9,7 @@ The dividers are regular Dock spacer tiles (no icon, no tooltip). Dock Divider r
 ## Requirements
 
 - macOS 14 or later
-- Accessibility permission: needed to read the position of the Dock's items. The app asks for it on first launch; grant it in **System Settings → Privacy & Security → Accessibility**.
+- Accessibility permission. Dock Divider uses it only to read where the Dock's items are, so it can draw the lines over the spacers; it does not read your keyboard, screen, or data. The app asks for it on first launch: open **System Settings → Privacy & Security → Accessibility** (on newer macOS versions, the pane listing apps allowed to control your Mac) and turn on Dock Divider. If it is not in the list, click **+** and add it from `Applications`.
 
 ## Install
 
@@ -61,6 +61,12 @@ The image is created at `build/DockDivider.dmg`.
 - **Remove a divider**: drag the spacer out of the Dock, as with any Dock item.
 
 Adding a divider writes to the Dock's preferences (`defaults write com.apple.dock persistent-apps`) and restarts the Dock (`killall Dock`). The spacers stay in the Dock even if Dock Divider is not running; they just show as empty space.
+
+## Uninstall
+
+1. Turn off **Open at Login** in the menu, then choose **Quit**.
+2. Drag each spacer out of the Dock; otherwise they stay as empty gaps.
+3. Move `Dock Divider.app` from `Applications` to the Trash.
 
 ## App icon
 
