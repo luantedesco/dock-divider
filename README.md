@@ -13,6 +13,16 @@ The dividers are regular Dock spacer tiles (no icon, no tooltip). Dock Divider r
 
 ## Install
 
+Paste this in Terminal:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/luantedesco/dock-divider/main/Tools/install.sh | sh
+```
+
+It downloads the latest release, installs it in `/Applications`, and opens it. Run it again to update.
+
+### Manual install
+
 Download `DockDivider-<version>.dmg` from the [latest release](https://github.com/luantedesco/dock-divider/releases/latest), open it, and drag `Dock Divider.app` to `Applications`.
 
 The app is not notarized by Apple, so macOS blocks it on first launch. To open it:
