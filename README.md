@@ -57,6 +57,7 @@ The image is created at `build/DockDivider-<version>.dmg`.
 <img src="screenshots/menu.png" alt="Menu bar menu with Add Divider and Quit" width="240">
 
 - **Add Divider** (menu bar icon): adds a spacer at the end of the apps section of the Dock. Drag it to where you want it.
+- **Open at Login**: starts Dock Divider with your Mac, so the lines are always there.
 - **Remove a divider**: drag the spacer out of the Dock, as with any Dock item.
 
 Adding a divider writes to the Dock's preferences (`defaults write com.apple.dock persistent-apps`) and restarts the Dock (`killall Dock`). The spacers stay in the Dock even if Dock Divider is not running; they just show as empty space.

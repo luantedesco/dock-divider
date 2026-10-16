@@ -1,4 +1,5 @@
 import AppKit
+import ServiceManagement
 
 // As divisórias são os espaços nativos da Dock ("spacer-tile"): sem ícone e sem balão.
 // O app lê pela Acessibilidade onde cada espaço está e desenha por cima uma linha igual à
@@ -17,6 +18,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.button?.image = NSImage(systemSymbolName: "poweron", accessibilityDescription: "Dock Divider")
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Add Divider", action: #selector(addSpacer), keyEquivalent: ""))
+        let login = NSMenuItem(title: "Open at Login", action: #selector(toggleOpenAtLogin(_:)), keyEquivalent: "")
+        login.state = SMAppService.mainApp.status == .enabled ? .on : .off
+        menu.addItem(login)
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem.menu = menu
@@ -33,6 +37,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: .main
         ) { [weak self] _ in self?.speedUp() }
         refresh()
+    }
+
+    @objc private func toggleOpenAtLogin(_ item: NSMenuItem) {
+        let service = SMAppService.mainApp
+        try? service.status == .enabled ? service.unregister() : service.register()
+        item.state = service.status == .enabled ? .on : .off
     }
 
     // Novo espaço vai para o fim dos apps; o usuário arrasta para a posição.
