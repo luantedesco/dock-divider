@@ -4,9 +4,7 @@
 # O curl não marca o download com quarentena, então o Gatekeeper não bloqueia o app sem notarização.
 set -e
 APP="/Applications/Dock Divider.app"
-URL=$(curl -fsSL https://api.github.com/repos/luantedesco/dock-divider/releases/latest \
-  | grep -o '"browser_download_url": *"[^"]*\.dmg"' | cut -d '"' -f 4)
-[ -n "$URL" ] || { echo "No .dmg found in the latest release." >&2; exit 1; }
+URL=https://github.com/luantedesco/dock-divider/releases/latest/download/DockDivider.dmg
 TMP=$(mktemp -d)
 trap 'hdiutil detach "$TMP/mnt" -quiet 2>/dev/null || true; rm -rf "$TMP"' EXIT
 echo "Downloading $URL"

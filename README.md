@@ -23,7 +23,7 @@ It downloads the latest release, installs it in `/Applications`, and opens it. R
 
 ### Manual install
 
-Download `DockDivider-<version>.dmg` from the [latest release](https://github.com/luantedesco/dock-divider/releases/latest), open it, and drag `Dock Divider.app` to `Applications`.
+Download `DockDivider.dmg` from the [latest release](https://github.com/luantedesco/dock-divider/releases/latest), open it, and drag `Dock Divider.app` to `Applications`.
 
 The app is not notarized by Apple, so macOS blocks it on first launch. To open it:
 
@@ -50,7 +50,7 @@ To package it as a disk image for distribution:
 ./Tools/make-dmg.sh
 ```
 
-The image is created at `build/DockDivider-<version>.dmg`.
+The image is created at `build/DockDivider.dmg`.
 
 ## Usage
 
