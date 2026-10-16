@@ -13,7 +13,7 @@ The dividers are regular Dock spacer tiles (no icon, no tooltip). Dock Divider r
 
 ## Install
 
-Download `DockDivider-<version>.zip` from the [latest release](https://github.com/luantedesco/dock-divider/releases/latest), unzip it, and move `Dock Divider.app` to `/Applications`.
+Download `DockDivider-<version>.dmg` from the [latest release](https://github.com/luantedesco/dock-divider/releases/latest), open it, and drag `Dock Divider.app` to `Applications`.
 
 The app is not notarized by Apple, so macOS blocks it on first launch. To open it:
 
@@ -33,6 +33,14 @@ xattr -dr com.apple.quarantine "/Applications/Dock Divider.app"
 ```
 
 The app is built at `build/Dock Divider.app` as a universal binary (Apple Silicon and Intel). Move it to `/Applications` and open it.
+
+To package it as a disk image for distribution:
+
+```sh
+./make-dmg.sh
+```
+
+The image is created at `build/DockDivider-<version>.dmg`.
 
 ### Keeping the Accessibility permission across rebuilds
 
