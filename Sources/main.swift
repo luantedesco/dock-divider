@@ -91,16 +91,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func makeLineWindow() -> NSWindow {
         let window = NSWindow(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
         window.isOpaque = false
-        // Same tone as the system line: light in dark mode, dark in light mode.
-        window.backgroundColor = NSColor(name: nil) { appearance in
-            appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-                ? NSColor(white: 1, alpha: 0.33) : NSColor(white: 0, alpha: 0.4)
-        }
+        window.backgroundColor = .clear
         window.hasShadow = false
         window.ignoresMouseEvents = true
         window.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.dockWindow)) + 1)
         window.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
+        // The system separator color, with vibrancy over the Dock behind the window, matches the
+        // line the Dock draws next to the Trash, in both light and dark mode.
+        let effect = NSVisualEffectView()
+        effect.material = .hudWindow
+        effect.blendingMode = .behindWindow
+        effect.state = .active
+        let line = SeparatorLine()
+        line.autoresizingMask = [.width, .height]
+        effect.addSubview(line)
+        window.contentView = effect
         return window
+    }
+}
+
+final class SeparatorLine: NSView {
+    override var allowsVibrancy: Bool { true }
+
+    override func draw(_ dirtyRect: NSRect) {
+        NSColor.separatorColor.setFill()
+        bounds.fill()
     }
 }
 
