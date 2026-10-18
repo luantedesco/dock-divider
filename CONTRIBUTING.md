@@ -29,13 +29,13 @@ The certificate is only for your Mac; it does not need to match the one releases
 
 ## Code
 
-- Geometry that does not depend on AppKit or Accessibility goes in `Sources/DockDividerCore`, with tests in `Tests/DockDividerCoreTests`. The app itself (menu, Accessibility, windows) is in `Sources/DockDivider/main.swift`.
+- What does not depend on AppKit or Accessibility goes in `Sources/DockDividerCore`, with tests in `Tests/DockDividerCoreTests`: the geometry of the lines (`DockLayout`) and when to read the Dock (`DockTracker`). `DockTracker` reads the Dock through the `DockReader` protocol, so tests use a fake Dock. The app itself is in `Sources/DockDivider`: the Accessibility reader in `AccessibilityDockReader.swift`, and the menu and the line windows in `main.swift`.
 - Code, comments, and messages are in English.
 - Commit messages follow `type(scope): description`, where the description says what changes for the user, for example `fix: dividers follow the Dock's show/hide animation`. Types in use: `feat`, `fix`, `refactor`, `docs`, `chore`.
 
 ## Testing
 
-The tests cover the geometry; what depends on the real Dock is checked by hand. Before opening a pull request, run the app you built and check that the lines sit on the spacers:
+The tests cover the geometry and the refresh rate; what depends on the real Dock is checked by hand. Before opening a pull request, run the app you built and check that the lines sit on the spacers:
 
 - with the Dock at the bottom, on the left, and on the right
 - with the Dock hidden automatically, while it shows and hides
