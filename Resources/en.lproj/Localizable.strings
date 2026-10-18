@@ -6,3 +6,7 @@
 "Open at Login" = "Open at Login";
 /* Menu item. */
 "Quit" = "Quit";
+/* Alert when Add Divider fails. */
+"The divider couldn't be added." = "The divider couldn't be added.";
+/* Alert when turning Open at Login on or off fails; the system's reason follows. */
+"Open at Login couldn't be changed." = "Open at Login couldn't be changed.";

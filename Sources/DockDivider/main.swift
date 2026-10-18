@@ -43,19 +43,34 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func toggleOpenAtLogin(_ item: NSMenuItem) {
         let service = SMAppService.mainApp
-        try? service.status == .enabled ? service.unregister() : service.register()
+        do {
+            try service.status == .enabled ? service.unregister() : service.register()
+        } catch {
+            showError(String(localized: "Open at Login couldn't be changed."), error.localizedDescription)
+        }
         item.state = service.status == .enabled ? .on : .off
     }
 
     // The new spacer goes to the end of the apps; the user drags it into place.
     @objc private func addSpacer() {
-        run(
+        let added = run(
             "/usr/bin/defaults",
             [
                 "write", "com.apple.dock", "persistent-apps", "-array-add",
                 #"{"tile-type"="spacer-tile";}"#,
             ])
-        run("/usr/bin/killall", ["Dock"])
+        if !added || !run("/usr/bin/killall", ["Dock"]) {
+            showError(String(localized: "The divider couldn't be added."))
+        }
+    }
+
+    private func showError(_ message: String, _ details: String = "") {
+        NSApp.activate()
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = message
+        alert.informativeText = details
+        alert.runModal()
     }
 
     private func speedUp() {
@@ -100,12 +115,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-func run(_ path: String, _ args: [String]) {
+// Whether the tool ran and exited with success.
+func run(_ path: String, _ args: [String]) -> Bool {
     let p = Process()
     p.executableURL = URL(fileURLWithPath: path)
     p.arguments = args
-    try? p.run()
+    do { try p.run() } catch { return false }
     p.waitUntilExit()
+    return p.terminationStatus == 0
 }
 
 let app = NSApplication.shared

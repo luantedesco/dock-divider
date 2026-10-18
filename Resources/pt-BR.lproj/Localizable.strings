@@ -6,3 +6,7 @@
 "Open at Login" = "Abrir ao Iniciar Sessão";
 /* Menu item. */
 "Quit" = "Sair";
+/* Alert when Add Divider fails. */
+"The divider couldn't be added." = "Não foi possível adicionar a divisória.";
+/* Alert when turning Open at Login on or off fails; the system's reason follows. */
+"Open at Login couldn't be changed." = "Não foi possível alterar Abrir ao Iniciar Sessão.";
