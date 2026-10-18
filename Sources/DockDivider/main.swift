@@ -1,4 +1,5 @@
 import AppKit
+import DockDividerCore
 import ServiceManagement
 
 // The dividers are the Dock's native spacers ("spacer-tile"): no icon and no tooltip.
@@ -31,7 +32,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // The Dock moves when it shows, hides, or magnifies, always with the cursor near its edge,
         // and when the Space changes (full screen). The lines follow the animation then.
         NSEvent.addGlobalMonitorForEvents(matching: .mouseMoved) { [weak self] _ in
-            if let self, self.layout.isNear(NSEvent.mouseLocation) { self.speedUp() }
+            let point = NSEvent.mouseLocation
+            guard let self,
+                  let screen = NSScreen.screens.first(where: { NSMouseInRect(point, $0.frame, false) })
+            else { return }
+            if self.layout.isNear(point, screen: screen.frame) { self.speedUp() }
         }
         NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: .main
@@ -104,25 +109,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-// Where the Dock is and where to draw the lines, in AppKit coordinates.
-struct DockLayout {
-    var lines: [NSRect]
-    var edge: NSRectEdge
-    var thickness: CGFloat
-
-    // Cursor within the band along the Dock's screen edge, with room for the Dock to start hiding.
-    func isNear(_ point: NSPoint) -> Bool {
-        guard let screen = NSScreen.screens.first(where: { NSMouseInRect(point, $0.frame, false) })?.frame
-        else { return false }
-        let band = thickness + 40
-        switch edge {
-        case .minX: return point.x - screen.minX < band
-        case .maxX: return screen.maxX - point.x < band
-        default: return point.y - screen.minY < band
-        }
-    }
-}
-
 struct DockItems {
     var separator: AXUIElement
     var spacers: [AXUIElement]
@@ -138,29 +124,15 @@ func dockItems() -> DockItems? {
     return DockItems(separator: separator, spacers: items.filter { subrole(of: $0) == "AXSpacerDockItem" })
 }
 
-// One line at the center of each spacer, across the Dock. The system line spans ~72% of the
-// separator item's thickness, centered on it. With the Dock hidden, Accessibility reports the
-// items off screen, and the lines go off screen with them. Nil if any item is gone.
+// The lines over the spacers, nil if any item is gone.
 func dockLayout(of items: DockItems) -> DockLayout? {
     let spacers = items.spacers.compactMap(frame(of:))
     guard spacers.count == items.spacers.count,
           let separator = frame(of: items.separator),
           let screenHeight = NSScreen.screens.first?.frame.height
     else { return nil }
-
-    // On a bottom Dock the separator item is tall and narrow; on a side Dock, wide and short.
-    let horizontal = separator.height > separator.width
-    let length = ((horizontal ? separator.height : separator.width) * 0.72).rounded()
-    let lines = spacers.map { spacer in
-        // Rect in Accessibility coordinates, converted to AppKit's (origin at the bottom).
-        let rect = horizontal
-            ? CGRect(x: spacer.midX - 0.5, y: separator.midY - length / 2, width: 1, height: length)
-            : CGRect(x: separator.midX - length / 2, y: spacer.midY - 0.5, width: length, height: 1)
-        return NSRect(x: rect.minX, y: screenHeight - rect.maxY, width: rect.width, height: rect.height)
-    }
     let screensMidX = NSScreen.screens.reduce(NSRect.null) { $0.union($1.frame) }.midX
-    let edge: NSRectEdge = horizontal ? .minY : separator.midX < screensMidX ? .minX : .maxX
-    return DockLayout(lines: lines, edge: edge, thickness: horizontal ? separator.height : separator.width)
+    return DockLayout(separator: separator, spacers: spacers, screenHeight: screenHeight, screensMidX: screensMidX)
 }
 
 func children(of element: AXUIElement) -> [AXUIElement] {

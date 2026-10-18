@@ -9,11 +9,8 @@ IDENTITY="Dock Divider Local Signing"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 # Universal binary: runs on Apple Silicon and Intel.
-for ARCH in arm64 x86_64; do
-  swiftc -O -target "$ARCH-apple-macos14" Sources/main.swift -o "build/DockDivider-$ARCH"
-done
-lipo -create build/DockDivider-arm64 build/DockDivider-x86_64 -output "$APP/Contents/MacOS/DockDivider"
-rm build/DockDivider-arm64 build/DockDivider-x86_64
+swift build -c release --arch arm64 --arch x86_64
+cp "$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/DockDivider" "$APP/Contents/MacOS/DockDivider"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
 swift Tools/make-icon.swift "$APP/Contents/Resources/AppIcon.icns"
 if security find-identity -p codesigning | grep -q "\"$IDENTITY\""; then
