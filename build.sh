@@ -12,6 +12,7 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 swift build -c release --arch arm64 --arch x86_64
 cp "$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/DockDivider" "$APP/Contents/MacOS/DockDivider"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
+cp -R Resources/*.lproj "$APP/Contents/Resources/"
 swift Tools/make-icon.swift "$APP/Contents/Resources/AppIcon.icns"
 if security find-identity -p codesigning | grep -q "\"$IDENTITY\""; then
   codesign --force -s "$IDENTITY" "$APP"

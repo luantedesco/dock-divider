@@ -16,14 +16,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        statusItem.button?.image = NSImage(systemSymbolName: "poweron", accessibilityDescription: "Dock Divider")
+        statusItem.button?.image = NSImage(systemSymbolName: "poweron", accessibilityDescription: String(localized: "Dock Divider"))
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "Add Divider", action: #selector(addSpacer), keyEquivalent: ""))
-        let login = NSMenuItem(title: "Open at Login", action: #selector(toggleOpenAtLogin(_:)), keyEquivalent: "")
+        menu.addItem(NSMenuItem(title: String(localized: "Add Divider"), action: #selector(addSpacer), keyEquivalent: ""))
+        let login = NSMenuItem(title: String(localized: "Open at Login"), action: #selector(toggleOpenAtLogin(_:)), keyEquivalent: "")
         login.state = SMAppService.mainApp.status == .enabled ? .on : .off
         menu.addItem(login)
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: String(localized: "Quit"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem.menu = menu
 
         let prompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String

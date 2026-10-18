@@ -1,0 +1,8 @@
+/* Menu bar icon, read by VoiceOver. */
+"Dock Divider" = "Dock Divider";
+/* Menu item: adds a spacer to the Dock. */
+"Add Divider" = "Add Divider";
+/* Menu item: starts the app with the Mac. */
+"Open at Login" = "Open at Login";
+/* Menu item. */
+"Quit" = "Quit";
