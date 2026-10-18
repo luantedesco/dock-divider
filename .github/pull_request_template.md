@@ -1,0 +1,11 @@
+## What changes
+
+<!-- What the app does differently, and why. Link the issue if there is one. -->
+
+## How it was tested
+
+<!-- Steps you followed in the running app. See "Testing" in CONTRIBUTING.md. -->
+
+- [ ] `./test.sh`, `./build.sh`, `swift Tools/check-strings.swift`, and `swiftlint lint --strict` pass
+- [ ] Checked in the running app, in light and dark mode
+- [ ] New or changed menu text is in `Resources/en.lproj/Localizable.strings`
