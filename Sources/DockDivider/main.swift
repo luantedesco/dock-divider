@@ -34,7 +34,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSEvent.addGlobalMonitorForEvents(matching: .mouseMoved) { [weak self] _ in
             let point = NSEvent.mouseLocation
             guard let self,
-                  let screen = NSScreen.screens.first(where: { NSMouseInRect(point, $0.frame, false) })
+                let screen = NSScreen.screens.first(where: { NSMouseInRect(point, $0.frame, false) })
             else { return }
             if self.layout.isNear(point, screen: screen.frame) { self.speedUp() }
         }
@@ -52,8 +52,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // The new spacer goes to the end of the apps; the user drags it into place.
     @objc private func addSpacer() {
-        run("/usr/bin/defaults", ["write", "com.apple.dock", "persistent-apps", "-array-add",
-                                  #"{"tile-type"="spacer-tile";}"#])
+        run(
+            "/usr/bin/defaults",
+            [
+                "write", "com.apple.dock", "persistent-apps", "-array-add",
+                #"{"tile-type"="spacer-tile";}"#,
+            ])
         run("/usr/bin/killall", ["Dock"])
     }
 
@@ -117,7 +121,7 @@ struct DockItems {
 // The Trash separator item and the spacers, in Dock order.
 func dockItems() -> DockItems? {
     guard let dock = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first,
-          let list = children(of: AXUIElementCreateApplication(dock.processIdentifier)).first(where: { role(of: $0) == "AXList" })
+        let list = children(of: AXUIElementCreateApplication(dock.processIdentifier)).first(where: { role(of: $0) == "AXList" })
     else { return nil }
     let items = children(of: list)
     guard let separator = items.first(where: { subrole(of: $0) == "AXSeparatorDockItem" }) else { return nil }
@@ -128,8 +132,8 @@ func dockItems() -> DockItems? {
 func dockLayout(of items: DockItems) -> DockLayout? {
     let spacers = items.spacers.compactMap(frame(of:))
     guard spacers.count == items.spacers.count,
-          let separator = frame(of: items.separator),
-          let screenHeight = NSScreen.screens.first?.frame.height
+        let separator = frame(of: items.separator),
+        let screenHeight = NSScreen.screens.first?.frame.height
     else { return nil }
     let screensMidX = NSScreen.screens.reduce(NSRect.null) { $0.union($1.frame) }.midX
     return DockLayout(separator: separator, spacers: spacers, screenHeight: screenHeight, screensMidX: screensMidX)
@@ -152,16 +156,18 @@ func stringAttribute(_ name: String, of element: AXUIElement) -> String? {
 
 // Frame in Accessibility coordinates: origin at the top-left corner of the main screen.
 func frame(of element: AXUIElement) -> CGRect? {
-    var position: CFTypeRef?, size: CFTypeRef?
+    var position: CFTypeRef?
+    var size: CFTypeRef?
     AXUIElementCopyAttributeValue(element, kAXPositionAttribute as CFString, &position)
     AXUIElementCopyAttributeValue(element, kAXSizeAttribute as CFString, &size)
     // CF types do not support "as?": check the type first, so the cast cannot fail.
     guard let position, let size,
-          CFGetTypeID(position) == AXValueGetTypeID(), CFGetTypeID(size) == AXValueGetTypeID()
+        CFGetTypeID(position) == AXValueGetTypeID(), CFGetTypeID(size) == AXValueGetTypeID()
     else { return nil }
-    var origin = CGPoint.zero, extent = CGSize.zero
+    var origin = CGPoint.zero
+    var extent = CGSize.zero
     guard AXValueGetValue(position as! AXValue, .cgPoint, &origin),
-          AXValueGetValue(size as! AXValue, .cgSize, &extent)
+        AXValueGetValue(size as! AXValue, .cgSize, &extent)
     else { return nil }
     return CGRect(origin: origin, size: extent)
 }

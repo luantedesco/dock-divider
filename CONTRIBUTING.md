@@ -6,23 +6,16 @@ Bug reports, ideas, translations, and pull requests are welcome. For a larger ch
 
 - macOS 14 or later
 - Xcode, or only the Command Line Tools (`xcode-select --install`)
-- [SwiftLint](https://github.com/realm/SwiftLint) (`brew install swiftlint`)
 
 ## Build, test, and lint
 
 ```sh
 ./build.sh                       # builds build/Dock Divider.app
 ./test.sh                        # runs the tests, translations included
-swiftlint lint --strict
+swift format lint -r -s Sources Tests Tools Package.swift
 ```
 
-With only the Command Line Tools, SwiftLint does not find SourceKit on its own; point it to the one they include:
-
-```sh
-DYLD_FRAMEWORK_PATH=/Library/Developer/CommandLineTools/usr/lib swiftlint lint --strict
-```
-
-The same checks run on every pull request.
+Formatting follows `.swift-format`; `swift format -i -r Sources Tests Tools Package.swift` applies it. The same checks run on every pull request.
 
 ## Signing certificate
 

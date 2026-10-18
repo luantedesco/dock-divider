@@ -14,5 +14,4 @@ jobs:
       - uses: actions/checkout@v7
       - run: ./test.sh
       - run: ./build.sh
-      - run: command -v swiftlint || brew install swiftlint
-      - run: swiftlint lint --strict
+      - run: swift format lint -r -s Sources Tests Tools Package.swift
