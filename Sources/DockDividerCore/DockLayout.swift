@@ -24,7 +24,8 @@ public struct DockLayout {
         let length = ((horizontal ? separator.height : separator.width) * 0.72).rounded()
         lines = spacers.map { spacer in
             // Rect in Accessibility coordinates, converted to AppKit's (origin at the bottom).
-            let rect = horizontal
+            let rect =
+                horizontal
                 ? CGRect(x: spacer.midX - 0.5, y: separator.midY - length / 2, width: 1, height: length)
                 : CGRect(x: separator.midX - length / 2, y: spacer.midY - 0.5, width: length, height: 1)
             return NSRect(x: rect.minX, y: screenHeight - rect.maxY, width: rect.width, height: rect.height)

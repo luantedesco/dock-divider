@@ -6,6 +6,6 @@
 
 <!-- Steps you followed in the running app. See "Testing" in CONTRIBUTING.md. -->
 
-- [ ] `./test.sh`, `./build.sh`, `swift Tools/check-strings.swift`, and `swiftlint lint --strict` pass
+- [ ] `./test.sh`, `./build.sh`, and `swift format lint -r -s Sources Tests Tools Package.swift` pass
 - [ ] Checked in the running app, in light and dark mode
 - [ ] New or changed menu text is in `Resources/en.lproj/Localizable.strings`
