@@ -12,8 +12,7 @@ Bug reports, ideas, translations, and pull requests are welcome. For a larger ch
 
 ```sh
 ./build.sh                       # builds build/Dock Divider.app
-./test.sh                        # runs the tests
-swift Tools/check-strings.swift  # checks the translations
+./test.sh                        # runs the tests, translations included
 swiftlint lint --strict
 ```
 
@@ -58,14 +57,14 @@ Menu text lives in `Resources/<language>.lproj/Localizable.strings`, with Englis
 
 1. Copy `Resources/en.lproj` to `Resources/<code>.lproj`, using the code macOS uses for the language (for example `de`, `es`, `fr`, `ja`, `pt-BR`, `zh-Hans`).
 2. Translate the text on the right of each `=`; keep the keys on the left as they are. Use the words macOS uses in its own menus where they exist.
-3. Run `swift Tools/check-strings.swift`, then build and open the app in that language:
+3. Run `./test.sh`, then build and open the app in that language:
 
    ```sh
    ./build.sh
    open "build/Dock Divider.app" --args -AppleLanguages "(<code>)"
    ```
 
-New text in the code goes through `String(localized: "…")`, with the English text as the key, and has to be added to `en.lproj`; `check-strings.swift` fails otherwise.
+New text in the code goes through `String(localized: "…")`, with the English text as the key, and has to be added to `en.lproj` and to every other language; `./test.sh` fails otherwise.
 
 ## Releases
 
