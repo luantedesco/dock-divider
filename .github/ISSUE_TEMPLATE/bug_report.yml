@@ -1,0 +1,58 @@
+name: Bug report
+description: Something does not work as described in the README.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you saw instead.
+    validations:
+      required: true
+  - type: input
+    id: app
+    attributes:
+      label: Dock Divider version
+      description: Finder → Applications → Dock Divider → Get Info.
+      placeholder: "1.1.2"
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: "15.3"
+    validations:
+      required: true
+  - type: dropdown
+    id: chip
+    attributes:
+      label: Mac
+      options: [Apple Silicon, Intel]
+    validations:
+      required: true
+  - type: dropdown
+    id: position
+    attributes:
+      label: Dock position
+      options: [Bottom, Left, Right]
+    validations:
+      required: true
+  - type: checkboxes
+    id: dock
+    attributes:
+      label: Dock settings
+      options:
+        - label: Automatically hide and show the Dock
+        - label: Magnification
+        - label: More than one display
+  - type: dropdown
+    id: appearance
+    attributes:
+      label: Appearance
+      options: [Light, Dark, Auto]
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: A screenshot of the Dock helps the most with misplaced or missing lines.

@@ -1,0 +1,19 @@
+# Builds, tests, and lints every push to main and every pull request.
+# Releases are not published here: they are signed on the maintainer's Mac (see CONTRIBUTING.md).
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: ./test.sh
+      - run: ./build.sh
+      - run: swift Tools/check-strings.swift
+      - run: command -v swiftlint || brew install swiftlint
+      - run: swiftlint lint --strict

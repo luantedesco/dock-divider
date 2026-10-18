@@ -52,6 +52,12 @@ To package it as a disk image for distribution:
 
 The image is created at `build/DockDivider.dmg`.
 
+To run the tests:
+
+```sh
+./test.sh
+```
+
 ## Usage
 
 <img src="screenshots/menu.png" alt="Menu bar menu with Add Divider and Quit" width="240">
@@ -71,6 +77,14 @@ Adding a divider writes to the Dock's preferences (`defaults write com.apple.doc
 ## App icon
 
 The app icon is drawn in `Resources/icon.svg`. `build.sh` turns it into `AppIcon.icns` on every build, so editing the SVG and rebuilding is enough.
+
+## Contributing
+
+Bug reports, ideas, and pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) covers building, testing, and the signing certificate that keeps the Accessibility permission across builds.
+
+## Translations
+
+Dock Divider is available in English and Brazilian Portuguese. To add a language, see [Translations](CONTRIBUTING.md#translations) in CONTRIBUTING.md.
 
 ## License
 
