@@ -9,3 +9,4 @@
 - [ ] `./test.sh`, `./build.sh`, and `swift format lint -r -s Sources Tests Tools Package.swift` pass
 - [ ] Checked in the running app, in light and dark mode
 - [ ] New or changed menu text is in `Resources/en.lproj/Localizable.strings`
+- [ ] A change people using the app will notice is under **Unreleased** in `CHANGELOG.md`
