@@ -1,5 +1,9 @@
 /* Menu bar icon, read by VoiceOver. */
 "Dock Divider" = "Dock Divider";
+/* Menu bar icon while Accessibility access is missing, read by VoiceOver. */
+"Dock Divider needs Accessibility access" = "Dock Divider needs Accessibility access";
+/* Menu item shown while Accessibility access is missing: opens System Settings. */
+"Allow Accessibility Access…" = "Allow Accessibility Access…";
 /* Menu item: adds a spacer to the Dock. */
 "Add Divider" = "Add Divider";
 /* Menu item: starts the app with the Mac. */

@@ -10,11 +10,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var lines: [NSWindow] = []
     private let tracker = DockTracker(reader: AccessibilityDockReader())
     private var timer: Timer?
+    private let accessItem = NSMenuItem(
+        title: String(localized: "Allow Accessibility Access…"), action: #selector(openAccessibilitySettings), keyEquivalent: "")
+    private var isTrusted: Bool?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        statusItem.button?.image = NSImage(systemSymbolName: "poweron", accessibilityDescription: String(localized: "Dock Divider"))
         let menu = NSMenu()
+        menu.addItem(accessItem)
         menu.addItem(NSMenuItem(title: String(localized: "Add Divider"), action: #selector(addSpacer), keyEquivalent: ""))
         let login = NSMenuItem(title: String(localized: "Open at Login"), action: #selector(toggleOpenAtLogin(_:)), keyEquivalent: "")
         login.state = SMAppService.mainApp.status == .enabled ? .on : .off
@@ -51,6 +54,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         item.state = service.status == .enabled ? .on : .off
     }
 
+    // Without Accessibility the Dock can't be read and no line shows, so the menu bar icon turns
+    // into a warning and the menu offers the way to System Settings until access is granted.
+    private func updateAccess() {
+        let trusted = AXIsProcessTrusted()
+        guard trusted != isTrusted else { return }
+        isTrusted = trusted
+        accessItem.isHidden = trusted
+        statusItem.button?.image =
+            trusted
+            ? NSImage(systemSymbolName: "poweron", accessibilityDescription: String(localized: "Dock Divider"))
+            : NSImage(
+                systemSymbolName: "exclamationmark.triangle",
+                accessibilityDescription: String(localized: "Dock Divider needs Accessibility access"))
+    }
+
+    @objc private func openAccessibilitySettings() {
+        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!)
+    }
+
     // The new spacer goes to the end of the apps; the user drags it into place.
     @objc private func addSpacer() {
         let added = run(
@@ -79,6 +101,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func refresh() {
+        updateAccess()
         let moved = tracker.refresh()
         let interval = tracker.interval()
         if timer?.timeInterval != interval {

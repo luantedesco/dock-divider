@@ -43,6 +43,7 @@ The tests cover the geometry and the refresh rate; what depends on the real Dock
 - in light and in dark mode
 - with more than one display, if you have one
 - after **Add Divider**, and after dragging a spacer out of the Dock
+- without Accessibility access (`tccutil reset Accessibility io.github.luantedesco.dock-divider`): the icon shows a warning and the menu has **Allow Accessibility Access…**; after granting it, the lines show and the item goes away
 
 ## Translations
 
