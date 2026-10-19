@@ -62,4 +62,6 @@ New text in the code goes through `String(localized: "…")`, with the English t
 
 ## Releases
 
-Releases are built and signed by the maintainer, so that the Accessibility permission carries over between versions. Pull requests do not need to change the version number.
+A pull request that changes what the app does adds a line under **Unreleased** in [CHANGELOG.md](CHANGELOG.md), written for the people using the app.
+
+Releases are built and signed by the maintainer, so that the Accessibility permission carries over between versions. Pull requests do not need to change the version number. A release moves the **Unreleased** lines under the new version, and its notes are that section.
