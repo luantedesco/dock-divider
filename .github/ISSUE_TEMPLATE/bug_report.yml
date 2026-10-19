@@ -52,6 +52,14 @@ body:
       label: Appearance
       options: [Light, Dark, Auto]
   - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Dock Divider writes its failures to the system log. Paste the output of this Terminal command, run soon after the problem:
+        `/usr/bin/log show --last 1h --predicate 'subsystem == "io.github.luantedesco.dock-divider"'`
+      render: text
+  - type: textarea
     id: screenshot
     attributes:
       label: Screenshot
