@@ -9,7 +9,7 @@ The dividers are regular Dock spacer tiles (no icon, no tooltip). Dock Divider r
 ## Requirements
 
 - macOS 14 or later
-- Accessibility permission. Dock Divider uses it only to read where the Dock's items are, so it can draw the lines over the spacers; it does not read your keyboard, screen, or data. The app asks for it on first launch: open **System Settings → Privacy & Security → Accessibility** (on newer macOS versions, the pane listing apps allowed to control your Mac) and turn on Dock Divider. If it is not in the list, click **+** and add it from `Applications`. Until access is granted, the menu bar icon shows a warning sign and the menu has **Allow Accessibility Access…**, which opens that pane.
+- The **Accessibility** permission. Dock Divider uses it only to read where the Dock's items are, so it can draw the lines over the spacers; it does not read your keyboard, screen, or data. The app asks for it on first launch: open **System Settings → Privacy & Security → Accessibility** (on newer macOS versions, the pane listing apps allowed to control your Mac) and turn on Dock Divider. If it is not in the list, click **+** and add it from `Applications`. Until access is granted, the menu bar icon shows a warning sign and the menu has **Allow Accessibility Access…**, which opens that pane.
 
 ## Install
 
@@ -36,6 +36,22 @@ Or remove the quarantine flag from the terminal:
 xattr -dr com.apple.quarantine "/Applications/Dock Divider.app"
 ```
 
+## Usage
+
+<img src="screenshots/menu.png" alt="Menu bar menu with Add Divider and Quit" width="240">
+
+- **Add Divider** (menu bar icon): adds a spacer at the end of the apps section of the Dock. Drag it to where you want it.
+- **Open at Login**: starts Dock Divider with your Mac, so the lines are always there.
+- **Remove a divider**: drag the spacer out of the Dock, as with any Dock item.
+
+Adding a divider writes to the Dock's preferences (`defaults write com.apple.dock persistent-apps`) and restarts the Dock (`killall Dock`). The spacers stay in the Dock even if Dock Divider is not running; they just show as empty space.
+
+## Uninstall
+
+1. Turn off **Open at Login** in the menu, then choose **Quit**.
+2. Drag each spacer out of the Dock; otherwise they stay as empty gaps.
+3. Move `Dock Divider.app` from `Applications` to the Trash.
+
 ## Build
 
 ```sh
@@ -57,24 +73,6 @@ To run the tests:
 ```sh
 ./test.sh
 ```
-
-## Usage
-
-<img src="screenshots/menu.png" alt="Menu bar menu with Add Divider and Quit" width="240">
-
-- **Add Divider** (menu bar icon): adds a spacer at the end of the apps section of the Dock. Drag it to where you want it.
-- **Open at Login**: starts Dock Divider with your Mac, so the lines are always there.
-- **Remove a divider**: drag the spacer out of the Dock, as with any Dock item.
-
-Adding a divider writes to the Dock's preferences (`defaults write com.apple.dock persistent-apps`) and restarts the Dock (`killall Dock`). The spacers stay in the Dock even if Dock Divider is not running; they just show as empty space.
-
-## Uninstall
-
-1. Turn off **Open at Login** in the menu, then choose **Quit**.
-2. Drag each spacer out of the Dock; otherwise they stay as empty gaps.
-3. Move `Dock Divider.app` from `Applications` to the Trash.
-
-## App icon
 
 The app icon is drawn in `Resources/icon.svg`. `build.sh` turns it into `AppIcon.icns` on every build, so editing the SVG and rebuilding is enough.
 
