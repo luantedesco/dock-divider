@@ -9,7 +9,7 @@ The dividers are regular Dock spacer tiles (no icon, no tooltip). Dock Divider r
 ## Requirements
 
 - macOS 14 or later
-- The **Accessibility** permission. Dock Divider uses it only to read where the Dock's items are, so it can draw the lines over the spacers; it does not read your keyboard, screen, or data. The app asks for it on first launch: open **System Settings → Privacy & Security → Accessibility** (on newer macOS versions, the pane listing apps allowed to control your Mac) and turn on Dock Divider. If it is not in the list, click **+** and add it from `Applications`.
+- The **Accessibility** permission. Dock Divider uses it only to read where the Dock's items are, so it can draw the lines over the spacers; it does not read your keyboard, screen, or data. The app asks for it on first launch: open **System Settings → Privacy & Security → Accessibility** (on newer macOS versions, the pane listing apps allowed to control your Mac) and turn on Dock Divider. If it is not in the list, click **+** and add it from `Applications`. Until access is granted, the menu bar icon shows a warning sign and the menu has **Allow Accessibility Access…**, which opens that pane.
 
 ## Install
 
