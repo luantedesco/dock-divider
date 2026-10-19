@@ -49,6 +49,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             try service.status == .enabled ? service.unregister() : service.register()
         } catch {
+            logger.error("Open at Login: \(error.localizedDescription, privacy: .public)")
             showError(String(localized: "Open at Login couldn't be changed."), error.localizedDescription)
         }
         item.state = service.status == .enabled ? .on : .off
@@ -60,6 +61,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let trusted = AXIsProcessTrusted()
         guard trusted != isTrusted else { return }
         isTrusted = trusted
+        if !trusted { logger.error("Accessibility access is missing: the Dock can't be read.") }
         accessItem.isHidden = trusted
         statusItem.button?.image =
             trusted
@@ -143,8 +145,12 @@ func run(_ path: String, _ args: [String]) -> Bool {
     let p = Process()
     p.executableURL = URL(fileURLWithPath: path)
     p.arguments = args
-    do { try p.run() } catch { return false }
+    do { try p.run() } catch {
+        logger.error("\(path, privacy: .public) didn't run: \(error.localizedDescription, privacy: .public)")
+        return false
+    }
     p.waitUntilExit()
+    if p.terminationStatus != 0 { logger.error("\(path, privacy: .public) exited with \(p.terminationStatus)") }
     return p.terminationStatus == 0
 }
 
